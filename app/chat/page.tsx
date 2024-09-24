@@ -58,7 +58,7 @@ const Chat = () => {
   return (
     <>
       <NavBar />
-      <div className="flex flex-col min-h-[60vh] h-auto m-8 bg-slate-50 border border-blue-700 rounded-2xl">
+      <div className="flex flex-col min-h-[60vh] h-auto m-8 bg-slate-50 border border-blue-700 rounded-2xl items-center justify-center">
         <div className="chatbox overflow-y-auto flex-grow">
           {messages.map((message) => (
             <div
@@ -86,7 +86,6 @@ const Chat = () => {
         />
         <button
           type="button"
-          className="h-8 w-16"
           onClick={handleOnSubmit}
           aria-label="Send message"
         >

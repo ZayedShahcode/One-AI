@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -16,6 +17,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "One AI",
   description: "The Only AI You Will Ever Need",
+  icons: {
+    icon: './favicon.ico'
+  }
 };
 
 export default function RootLayout({
@@ -25,6 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      
       <body
         className={`${geistSans.variable} ${geistMono.variable} w-screen min-h-screen h-auto  gradient`}
       >
