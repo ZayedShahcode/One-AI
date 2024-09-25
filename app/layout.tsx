@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="en">
       
       <body
-        className={`${geistSans.variable} ${geistMono.variable} w-screen min-h-screen h-auto  gradient`}
+        className={`${geistSans.variable} ${geistMono.variable} max-w-screen min-h-screen h-auto  gradient`}
       >
         {children}
       </body>

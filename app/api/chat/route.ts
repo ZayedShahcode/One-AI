@@ -22,9 +22,8 @@ async function getGroqChatCompletion(message: string) {
 export async function POST(req: NextRequest) {
     const body = await req.json();
     const response = await getGroqChatCompletion(body.message);
-    console.log(response)
     return NextResponse.json({data:response.choices[0].message.content})
-      
+     
 }
 
 export async function GET(req: NextRequest) {

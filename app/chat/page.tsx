@@ -61,8 +61,8 @@ const Chat = () => {
   return (
     <>
       <NavBar />
-      <div className="flex flex-col min-h-[60vh] h-auto my-8 mx-4 border border-blue-700 rounded-2xl items-center justify-center ">
-        <div className="chatbox overflow-y-auto  flex-grow">
+      <div className="flex flex-col min-h-[60vh] h-auto m-8 border border-blue-700 rounded-2xl items-center justify-center ">
+        <div className="chatbox   flex-grow">
           {messages.map((message) => (
             <div
                key={message.data}
