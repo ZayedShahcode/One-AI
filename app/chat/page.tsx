@@ -1,102 +1,128 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../components/NavBar";
 import { marked } from "marked";
 import { FaArrowCircleUp } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext";
+import { v4 as uuidv4 } from "uuid";
 
 interface Message {
-  id: number;
-  data: string;
+  id: string;
+  content: string;
   isUser: boolean;
 }
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [currMessage, setCurrMessage] = useState<{
-    data: string;
-    isUser: boolean;
-  }>({ data: "", isUser: true });
+  const [inputMessage, setInputMessage] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [responseBuffer, setResponseBuffer] = useState<string>("");
+  const { isAuthenticated, currentUser } = useAuth();
 
-  const handleOnSubmit = async () => {
-    if (currMessage.data.trim() === "") return;
+  const chatEndRef = useRef<HTMLDivElement>(null);  // Reference for auto-scroll
 
-    const userMessage: Message = { ...currMessage, id: messages.length + 1 };
-    setMessages((currentMessages) => [...currentMessages, userMessage]);
-    setCurrMessage({ data: "", isUser: true });
-    setResponseBuffer("");
+  // Scroll to bottom whenever the messages change
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);  // Trigger when messages state changes
 
+  const handleSendMessage = async () => {
+    const trimmedMessage = inputMessage.trim();
+    if (!trimmedMessage) return;
+
+    // Add user's message
+    const userMessage: Message = {
+      id: uuidv4(),
+      content: trimmedMessage,
+      isUser: true,
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setInputMessage("");
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`https://oneai-backend.onrender.com/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.token}`,
         },
-        body: JSON.stringify({ message: currMessage.data }),
+        body: JSON.stringify({ message: trimmedMessage }),
       });
 
       if (!res.ok) throw new Error("Network response was not ok");
 
-      const ress = await res.json();
-      const formattedResponse = marked(ress.data);
-      const newResponse: Message = {
-        id: messages.length + 2,
-        data: formattedResponse as string,
+      const responseData = await res.json();
+      const formattedContent = await marked(responseData.response ?? "No response");
+
+      const botMessage: Message = {
+        id: uuidv4(),
+        content: formattedContent,
         isUser: false,
       };
 
-      setMessages((currMessages) => [...currMessages, newResponse]);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
+      console.error("Error fetching response:", err);
       setError("Failed to fetch response. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <>
+        <NavBar />
+        <div className="flex items-center justify-center h-screen text-2xl font-bold">
+          Please login to access the chat.
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <NavBar />
-      <div className="flex flex-col min-h-[60vh] h-auto m-8 border border-blue-700 rounded-2xl items-center justify-center ">
-        <div className="chatbox   flex-grow">
-          {messages.map((message) => (
+      <div className="flex flex-col min-h-[60vh] h-auto m-8 border border-blue-700 rounded-2xl items-center justify-center">
+        <div className="chatbox flex-grow w-full">
+          {messages.map((msg) => (
             <div
-               key={message.data}
-               className={`flex ${message.isUser? "justify-end":"justify-start"}`}
+              key={msg.id}
+              className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`p-4 m-4 rounded-xl ${
-                  message.isUser
-                    ? " bg-blue-100   font-medium"
-                    : " border border-green-600 font-medium  bg-green-100"
+                className={`p-4 m-4 rounded-xl font-medium ${
+                  msg.isUser
+                    ? "bg-blue-100"
+                    : "bg-green-100 border border-green-600"
                 }`}
               >
-                <div dangerouslySetInnerHTML={{ __html: message.data }} />
+                <div dangerouslySetInnerHTML={{ __html: msg.content }} />
               </div>
             </div>
           ))}
           {loading && <div className="text-center">Loading...</div>}
           {error && <div className="text-red-500 text-center">{error}</div>}
         </div>
+        <div ref={chatEndRef} />  {/* Empty div to act as the scroll target */}
       </div>
+
       <div className="h-auto flex items-center gap-2 justify-center sticky bottom-0 p-2">
         <textarea
           wrap="soft"
           className="w-[70vw] p-2 border border-black resize-none rounded-xl"
-          value={currMessage.data}
-          placeholder="Ask me Anything"
-          onChange={(e) =>
-            setCurrMessage({ data: e.target.value, isUser: true })
-          }
+          value={inputMessage}
+          placeholder="Ask me anything..."
+          onChange={(e) => setInputMessage(e.target.value)}
           aria-label="Chat message input"
         />
         <button
           type="button"
-          onClick={handleOnSubmit}
+          onClick={handleSendMessage}
           aria-label="Send message"
         >
           <FaArrowCircleUp size={30} />
