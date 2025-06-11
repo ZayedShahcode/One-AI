@@ -1,4 +1,4 @@
-One-AI is a NextJS based modern chatbot that can give answer to any of your query.
+One-AI is a NextJS based modern chatbot made with Langgraph framework.
 
 ## Getting Started
 
