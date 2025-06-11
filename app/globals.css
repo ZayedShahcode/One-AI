@@ -7,37 +7,131 @@
   background: linear-gradient(0deg, rgba(252,252,252,1) 2%, rgba(251,253,179,1) 41%, rgba(249,254,21,1) 88%);
 }
 
+.modern-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.chat-gradient {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.card-gradient {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.upcoming-gradient {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.glass-effect {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
 .textStroke {
   -webkit-text-stroke: 2px black;
   text-stroke: 2px black;
 }
 
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s infinite;
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
 /* Custom scrollbar for WebKit browsers */
 .chatbox::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
+  width: 8px;
 }
 
 .chatbox::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Track color */
-  border-radius: 10px; /* Rounded corners */
+  background: #f1f5f9;
+  border-radius: 10px;
 }
 
 .chatbox::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar color */
-  border-radius: 10px; /* Rounded corners */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
 }
 
 .chatbox::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color on hover */
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
-/* Hide scrollbar arrows (if any) */
 .chatbox::-webkit-scrollbar-button {
-  display: none; /* Remove arrows */
+  display: none;
 }
 
-/* Custom scrollbar for Firefox */
 .chatbox {
-  scrollbar-width: thin; /* "auto" or "thin" */
-  scrollbar-color: #888 #f1f1f1; /* Scrollbar color and track color */
+  scrollbar-width: thin;
+  scrollbar-color: #667eea #f1f5f9;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Message animations */
+.message-enter {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: messageEnter 0.3s ease-out forwards;
+}
+
+@keyframes messageEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

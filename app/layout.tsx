@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "One AI",
-  description: "The Only AI You Will Ever Need",
+  title: "OneAI - Your AI Assistant",
+  description: "Experience the future of conversational AI with OneAI. Get instant answers, creative solutions, and personalized assistance.",
   icons: {
     icon: './favicon.ico'
   }
@@ -31,9 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} max-w-screen min-h-screen h-auto  gradient`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
         <AuthProvider>
         {children}
         </AuthProvider>

@@ -21,10 +21,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+const storedUser = localStorage.getItem("user");
     const expiry = localStorage.getItem("expiry");
+  useEffect(() => {
+    
 
     if (storedUser && expiry) {
       const now = new Date().getTime();
